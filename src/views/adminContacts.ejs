@@ -1,0 +1,33 @@
+<div class="main-container">
+    <div class="large-block">
+        <h2>Administración de Contactos</h2>
+        <p>Revisa los mensajes recibidos.</p>
+    </div>
+
+    <div class="small-blocks">
+        <table border="1" cellpadding="5">
+            <thead>
+               <tr>
+                  <th>ID</th>
+                  <th>Nombres</th>
+                  <th>Email</th>
+                  <th>Comentario</th>
+                  <th>IP</th>
+                  <th>Fecha</th>
+               </tr>
+            </thead>
+            <tbody>
+              <% contacts.forEach(contact => { %>
+                 <tr>
+                    <td><%= contact.id %></td>
+                    <td><%= contact.names %></td>
+                    <td><%= contact.email %></td>
+                    <td><%= contact.comment %></td>
+                    <td><%= contact.ip %></td>
+                    <td><%= contact.created_at %></td>
+                 </tr>
+              <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>
