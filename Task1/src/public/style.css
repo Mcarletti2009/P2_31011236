@@ -1,0 +1,194 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+header {
+    background-color: #222;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #0077b6;
+    font-size: 1.5em;
+}
+
+/* Estilos para la descripción con imágenes a los lados */
+.description-part {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+.side-image {
+    width: 50%;
+    text-align: center;
+}
+
+.side-image img {
+    width: 100%;
+    max-width:500px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+}
+
+.side-image img:hover {
+    transform: scale(5);
+}
+
+.benefits-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.benefit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0077b6;
+    color: white;
+    padding: 15px;
+    border-radius: 50px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+/* Efecto hover en todo el bloque, imagen y texto */
+.benefit:hover {
+    background-color: #005f88; /* Cambio de color */
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+    transform: scale(2); /* Aumenta el tamaño del bloque */
+}
+
+.benefit img {
+    width: 60px;
+    height: 60px;
+    margin-right: 15px;
+    border-radius: 50%;
+    box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+/* Efecto hover en imagen */
+.benefit:hover img {
+    transform: scale(1.1);
+}
+
+/* Efecto hover en texto */
+.benefit p {
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.benefit:hover p {
+    color: #ffc062; /* Cambio de color en el texto */
+}
+
+/* Definimos la animación */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.benefit img {
+    width: 60px;
+    height: 60px;
+    margin-right: 15px;
+    border-radius: 50%;
+    box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);
+}
+
+/* Alinea el texto perfectamente */
+.benefit p {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+/* Estilos para enlaces de redes sociales */
+.social-links {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 20px;
+    margin: 10px;
+    border-radius: 50px;
+    text-decoration: none;
+    color: white;
+    font-size: 1.2em;
+    transition: all 0.3s ease;
+}
+
+/* Espacio entre el ícono y el texto */
+.social-btn i {
+    margin-right: 10px;
+    font-size: 1.4em;
+}
+
+/* Colores personalizados para cada red social */
+.instagram { background-color: #E4405F; }
+.facebook { background-color: #1877F2; }
+.tiktok { background-color: #000; }
+
+.social-btn:hover {
+    opacity: 0.8;
+}
+
+/* Centrar el texto debajo del h2 */
+p {
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Responsividad */
+@media screen and (max-width: 768px) {
+    .description-part {
+        flex-direction: column;
+        text-align: center;
+    }
+    .side-image, .text-container {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .benefit {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+    .benefit img {
+        margin-bottom: 10px;
+    }
+}
