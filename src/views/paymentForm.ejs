@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago | PixelCrafters</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>PixelCrafters</h1>
+        <p>CREANDO MUNDOS VISUALES, UN PIXEL A LA VEZ</p>
+        <nav class="main-nav">
+            <button onclick="window.location.href='/'" class="nav-btn">Inicio</button>
+            <button onclick="window.location.href='/contact'" class="nav-btn">Contacto</button>
+            <button onclick="window.location.href='/admin/contacts'" class="nav-btn">Admin</button>
+        </nav>
+    </header>
+
+    <div class="payment-section">
+        <h2>Realizar Pago</h2>
+        <p>Transacciones seguras para tu servicio de diseño</p>
+
+        <div class="payment-container">
+            <div class="payment-form-container">
+                <form class="payment-form" action="/payment/add" method="POST">
+                    <div class="form-group">
+                        <label for="email">
+                            <i class="fas fa-envelope"></i>
+                            Correo Electrónico
+                        </label>
+                        <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cardName">
+                            <i class="fas fa-user"></i>
+                            Nombre del Titular
+                        </label>
+                        <input type="text" id="cardName" name="cardName" placeholder="Como aparece en la tarjeta" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cardNumber">
+                            <i class="fas fa-credit-card"></i>
+                            Número de Tarjeta
+                        </label>
+                        <div class="card-input-container">
+                            <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" 
+                                   pattern="[0-9\s]{13,19}" maxlength="19" required>
+                            <div class="card-icons">
+                                <i class="fab fa-cc-visa"></i>
+                                <i class="fab fa-cc-mastercard"></i>
+                                <i class="fab fa-cc-amex"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiryMonth">
+                                <i class="fas fa-calendar"></i>
+                                Mes de Expiración
+                            </label>
+                            <input type="text" id="expiryMonth" name="expiryMonth" 
+                                   placeholder="MM" pattern="[0-9]{2}" maxlength="2" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="expiryYear">
+                                <i class="fas fa-calendar-alt"></i>
+                                Año de Expiración
+                            </label>
+                            <input type="text" id="expiryYear" name="expiryYear" 
+                                   placeholder="AA" pattern="[0-9]{2}" maxlength="2" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cvv">
+                                <i class="fas fa-lock"></i>
+                                CVV/CVC
+                            </label>
+                            <input type="text" id="cvv" name="cvv" 
+                                   placeholder="123" pattern="[0-9]{3,4}" maxlength="4" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">
+                            <i class="fas fa-dollar-sign"></i>
+                            Monto a Pagar
+                        </label>
+                        <div class="amount-input-container">
+                            <span class="currency-symbol">$</span>
+                            <input type="number" id="amount" name="amount" 
+                                   placeholder="0.00" min="0" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-lock"></i>
+                        Realizar Pago Seguro
+                    </button>
+                </form>
+            </div>
+
+            <div class="payment-benefits">
+                <div class="benefit">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Seguridad Garantizada</h3>
+                    <p>Tus datos están protegidos con encriptación de nivel bancario.</p>
+                </div>
+
+                <div class="benefit">
+                    <i class="fas fa-credit-card"></i>
+                    <h3>Múltiples Métodos de Pago</h3>
+                    <p>Aceptamos todas las tarjetas principales y transferencias.</p>
+                </div>
+
+                <div class="benefit">
+                    <i class="fas fa-headset"></i>
+                    <h3>Soporte 24/7</h3>
+                    <p>Nuestro equipo está disponible para ayudarte en cualquier momento.</p>
+                </div>
+
+                <div class="benefit">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Proceso Instantáneo</h3>
+                    <p>Confirmación inmediata de tu pago y acceso a los servicios.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Formatear número de tarjeta
+        document.getElementById('cardNumber').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            let formattedValue = '';
+            for(let i = 0; i < value.length; i++) {
+                if(i > 0 && i % 4 === 0) {
+                    formattedValue += ' ';
+                }
+                formattedValue += value[i];
+            }
+            e.target.value = formattedValue;
+        });
+
+        // Formatear fecha de expiración
+        document.getElementById('expiryMonth').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if(value > 12) value = 12;
+            e.target.value = value;
+        });
+
+        // Formatear CVV
+        document.getElementById('cvv').addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto | PixelCrafters</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>PixelCrafters</h1>
+        <p>CREANDO MUNDOS VISUALES, UN PIXEL A LA VEZ</p>
+        <nav class="main-nav">
+            <button onclick="window.location.href='/'" class="nav-btn">Inicio</button>
+            <button onclick="window.location.href='/payment'" class="nav-btn">Pago</button>
+            <button onclick="window.location.href='/admin/contacts'" class="nav-btn">Admin</button>
+        </nav>
+    </header>
+
+    <div class="contact-section">
+        <h2>Contáctanos</h2>
+        <p>Déjanos tu mensaje y nos pondremos en contacto contigo.</p>
+        
+        <form class="contact-form" action="/contact/add" method="POST">
+            <div class="form-group">
+                <label for="email">Correo Electrónico</label>
+                <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="names">Nombre Completo</label>
+                <input type="text" id="names" name="names" placeholder="Tu nombre completo" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="subject">Asunto</label>
+                <input type="text" id="subject" name="subject" placeholder="¿En qué podemos ayudarte?" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="comment">Mensaje</label>
+                <textarea id="comment" name="comment" placeholder="Escribe tu mensaje aquí..." required></textarea>
+            </div>
+            
+            <button type="submit" class="submit-btn">Enviar Mensaje</button>
+        </form>
+
+        <div class="benefits-grid">
+            <div class="benefit">
+                <h3>Atención Personalizada</h3>
+                <p>Te ofrecemos soluciones únicas para tu marca.</p>
+            </div>
+            <div class="benefit">
+                <h3>Plazos Rápidos</h3>
+                <p>Entregamos diseños con eficiencia y calidad.</p>
+            </div>
+            <div class="benefit">
+                <h3>Garantía de Satisfacción</h3>
+                <p>Trabajamos contigo hasta lograr el resultado ideal.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

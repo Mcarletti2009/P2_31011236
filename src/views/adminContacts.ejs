@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración de Contactos | PixelCrafters</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>PixelCrafters</h1>
+        <p>CREANDO MUNDOS VISUALES, UN PIXEL A LA VEZ</p>
+        <nav class="main-nav">
+            <button onclick="window.location.href='/'" class="nav-btn">Inicio</button>
+            <button onclick="window.location.href='/contact'" class="nav-btn">Contacto</button>
+            <button onclick="window.location.href='/payment'" class="nav-btn">Pago</button>
+        </nav>
+    </header>
+
+    <div class="admin-section">
+        <h2>Administración de Contactos</h2>
+        <p>Revisa los mensajes recibidos de tus clientes</p>
+
+        <% if (contacts && contacts.length > 0) { %>
+            <div class="admin-grid">
+                <% contacts.forEach(contact => { %>
+                    <div class="contact-card">
+                        <div class="contact-header">
+                            <div class="contact-date">
+                                <i class="far fa-clock"></i>
+                                <%= contact.created_at %>
+                            </div>
+                            <div class="contact-ip">
+                                <i class="fas fa-network-wired"></i>
+                                <%= contact.ip %>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-info">
+                            <div class="info-group">
+                                <label><i class="fas fa-user"></i> Nombre:</label>
+                                <span><%= contact.names %></span>
+                            </div>
+                            
+                            <div class="info-group">
+                                <label><i class="far fa-envelope"></i> Email:</label>
+                                <a href="mailto:<%= contact.email %>" class="email-link">
+                                    <%= contact.email %>
+                                </a>
+                            </div>
+                            
+                            <div class="info-group">
+                                <label><i class="fas fa-tag"></i> Asunto:</label>
+                                <span><%= contact.subject %></span>
+                            </div>
+                            
+                            <div class="info-group full-width">
+                                <label><i class="fas fa-comment"></i> Mensaje:</label>
+                                <div class="contact-message">
+                                    <%= contact.comment %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <div class="message">
+                <i class="fas fa-inbox"></i>
+                <p>No hay mensajes de contacto registrados.</p>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>
