@@ -1,0 +1,72 @@
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EGYY96LM88"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-EGYY96LM88');
+
+    // Función para rastrear eventos
+    function trackEvent(category, action, label = null, value = null) {
+        gtag('event', action, {
+            'event_category': category,
+            'event_label': label,
+            'value': value
+        });
+    }
+
+    // Rastrear clics en enlaces de navegación
+    document.addEventListener('DOMContentLoaded', function() {
+        // Rastrear clics en el menú de navegación
+        const navLinks = document.querySelectorAll('nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                trackEvent('Navegación', 'Clic en menú', this.textContent.trim());
+            });
+        });
+
+        // Rastrear envíos del formulario de contacto
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                trackEvent('Formulario', 'Envío de contacto', 'Formulario de contacto');
+            });
+        }
+
+        // Rastrear clics en enlaces de email
+        const emailLinks = document.querySelectorAll('.email-link');
+        emailLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                trackEvent('Contacto', 'Clic en email', this.href);
+            });
+        });
+
+        // Rastrear clics en enlaces de redes sociales
+        const socialLinks = document.querySelectorAll('.social-links a');
+        socialLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                trackEvent('Redes Sociales', 'Clic en red social', this.href);
+            });
+        });
+
+        // Rastrear tiempo de permanencia en la página
+        let startTime = new Date().getTime();
+        window.addEventListener('beforeunload', function() {
+            let endTime = new Date().getTime();
+            let timeSpent = Math.round((endTime - startTime) / 1000);
+            trackEvent('Engagement', 'Tiempo en página', null, timeSpent);
+        });
+
+        // Rastrear scroll
+        let maxScroll = 0;
+        window.addEventListener('scroll', function() {
+            let scrollPercent = Math.round((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100);
+            if (scrollPercent > maxScroll) {
+                maxScroll = scrollPercent;
+                if (maxScroll % 25 === 0) { // Rastrear cada 25% de scroll
+                    trackEvent('Engagement', 'Scroll', 'Scroll ' + maxScroll + '%');
+                }
+            }
+        });
+    });
+</script> 

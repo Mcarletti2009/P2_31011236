@@ -1,0 +1,42 @@
+<!-- Google reCAPTCHA -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+    function onSubmit(token) {
+        // Ocultar el botón de envío original
+        document.getElementById('submitButton').style.display = 'none';
+        
+        // Mostrar el modal de reCAPTCHA
+        const modal = document.getElementById('recaptchaModal');
+        modal.style.display = 'flex';
+        
+        // Cuando se complete el reCAPTCHA
+        grecaptcha.execute('6LfzXWArAAAAAGBJhvQK0-tCCQLglrFEVG-a298r', {action: 'submit'})
+            .then(function(token) {
+                // Añadir el token al formulario
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = 'g-recaptcha-response';
+                tokenInput.value = token;
+                document.getElementById('contactForm').appendChild(tokenInput);
+                
+                // Enviar el formulario
+                document.getElementById('contactForm').submit();
+            });
+    }
+</script>
+
+<!-- Modal de reCAPTCHA -->
+<div id="recaptchaModal" class="recaptcha-modal">
+    <div class="recaptcha-modal-content">
+        <h3>Verificación de Seguridad</h3>
+        <p>Por favor, complete la verificación de seguridad para enviar su mensaje.</p>
+        <div class="g-recaptcha" 
+             data-sitekey="6LfzXWArAAAAAGBJhvQK0-tCCQLglrFEVG-a298r"
+             data-callback="onSubmit"
+             data-size="normal">
+        </div>
+        <button onclick="document.getElementById('recaptchaModal').style.display='none'" class="close-modal">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+</div> 
