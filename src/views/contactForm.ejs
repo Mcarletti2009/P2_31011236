@@ -115,7 +115,7 @@
             <h3>Verificación de Seguridad</h3>
             <p>Para proteger nuestro sitio contra spam, por favor complete la verificación de seguridad antes de enviar su mensaje.</p>
             <div class="g-recaptcha" 
-                 data-sitekey="6LfzXWArAAAAAGBJhvQK0-tCCQLglrFEVG-a298r"
+                 data-sitekey="<%= process.env.RECAPTCHA_SITE_KEY %>"
                  data-callback="onRecaptchaComplete"
                  data-size="normal">
             </div>
@@ -128,6 +128,7 @@
 
     <script>
         let recaptchaToken = null;
+        const recaptchaSiteKey = '<%= process.env.RECAPTCHA_SITE_KEY %>';
 
         function onRecaptchaComplete(token) {
             console.log('reCAPTCHA completado, token recibido');
