@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-async function createInitialAdmin() {
+export async function createInitialAdmin() {
     const db = new sqlite3.Database(process.env.DATABASE_URL || './database.sqlite');
     const userModel = new UserModel(db);
 
@@ -31,5 +31,7 @@ async function createInitialAdmin() {
     }
 }
 
-// Ejecutar la función
-createInitialAdmin().catch(console.error); 
+// Solo ejecutar si se llama directamente al script
+if (require.main === module) {
+    createInitialAdmin().catch(console.error);
+} 

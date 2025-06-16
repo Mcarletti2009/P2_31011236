@@ -11,6 +11,7 @@ import { configurePassport } from './config/passport';
 import { UserModel } from './models/User';
 import authRoutes from './routes/auth';
 import { Strategy as GitHubStrategy } from 'passport-github2';
+import { Strategy as LocalStrategy } from 'passport-local';
 
 // Importa tus modelos y controladores (asegúrate de que las rutas sean correctas)
 import { ContactsModel } from './models/contactsModel';
@@ -18,12 +19,18 @@ import { ContactsController } from './controllers/contactsController';
 import { PaymentController } from './controllers/paymentController';
 import { PaymentModel } from './models/paymentModel';
 
+// Inicializar la base de datos y crear admin si es necesario
+import { createInitialAdmin } from './scripts/initAdmin';
+
 const app: express.Application = express();
 const PORT: number = Number(process.env.PORT) || 3000;
 
-// Configuración de la base de datos
+// Crear instancia de la base de datos
 const db = new sqlite3.Database(process.env.DATABASE_URL || './database.sqlite');
 app.set('db', db);
+
+// Inicializar admin si es necesario
+createInitialAdmin().catch(console.error);
 
 // Configurar el motor de vistas EJS
 app.set('view engine', 'ejs');
@@ -86,6 +93,34 @@ passport.deserializeUser(async (id: number, done) => {
         done(error);
     }
 });
+
+// Configurar estrategia local
+passport.use(new LocalStrategy(async (username, password, done) => {
+    try {
+        const db = app.get('db');
+        const userModel = new UserModel(db);
+        
+        // Buscar usuario
+        const user = await userModel.findByUsername(username);
+        if (!user) {
+            console.log('Usuario no encontrado:', username);
+            return done(null, false, { message: 'Usuario o contraseña incorrectos' });
+        }
+
+        // Verificar contraseña
+        const isValid = await userModel.verifyPassword(user, password);
+        if (!isValid) {
+            console.log('Contraseña incorrecta para usuario:', username);
+            return done(null, false, { message: 'Usuario o contraseña incorrectos' });
+        }
+
+        console.log('Login exitoso para usuario:', username);
+        return done(null, user);
+    } catch (error) {
+        console.error('Error en autenticación local:', error);
+        return done(error);
+    }
+}));
 
 // Configurar estrategia de GitHub
 const githubClientId = process.env.GITHUB_CLIENT_ID;
