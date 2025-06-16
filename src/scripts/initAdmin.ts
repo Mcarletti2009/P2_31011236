@@ -9,6 +9,14 @@ async function createInitialAdmin() {
     const userModel = new UserModel(db);
 
     try {
+        // Verificar si ya existe un admin
+        const existingAdmin = await userModel.findByUsername('admin');
+        
+        if (existingAdmin) {
+            console.log('El usuario administrador ya existe');
+            return;
+        }
+
         // Crear usuario administrador
         const adminUser = await userModel.createUser(
             'admin',
@@ -23,4 +31,5 @@ async function createInitialAdmin() {
     }
 }
 
-createInitialAdmin(); 
+// Ejecutar la función
+createInitialAdmin().catch(console.error); 

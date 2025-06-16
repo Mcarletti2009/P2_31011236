@@ -10,6 +10,7 @@ import passport from 'passport';
 import { configurePassport } from './config/passport';
 import { UserModel } from './models/User';
 import authRoutes from './routes/auth';
+import { Strategy as GitHubStrategy } from 'passport-github2';
 
 // Importa tus modelos y controladores (asegúrate de que las rutas sean correctas)
 import { ContactsModel } from './models/contactsModel';
@@ -70,7 +71,57 @@ app.use(session({
     }
 }));
 
-// Inicialización de Passport
+// Configuración de Passport
+passport.serializeUser((user: any, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser(async (id: number, done) => {
+    try {
+        const db = app.get('db');
+        const userModel = new UserModel(db);
+        const user = await userModel.findById(id);
+        done(null, user);
+    } catch (error) {
+        done(error);
+    }
+});
+
+// Configurar estrategia de GitHub
+const githubClientId = process.env.GITHUB_CLIENT_ID;
+const githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
+const githubCallbackUrl = process.env.GITHUB_CALLBACK_URL;
+
+if (githubClientId && githubClientSecret && githubCallbackUrl) {
+    passport.use(new GitHubStrategy({
+        clientID: githubClientId,
+        clientSecret: githubClientSecret,
+        callbackURL: githubCallbackUrl
+    }, async (accessToken, refreshToken, profile, done) => {
+        try {
+            const db = app.get('db');
+            const userModel = new UserModel(db);
+            
+            // Buscar o crear usuario
+            const user = await userModel.createOrUpdateGithubUser(
+                profile.id.toString(),
+                profile.username || profile.displayName
+            );
+            
+            return done(null, user);
+        } catch (error) {
+            return done(error as Error);
+        }
+    }));
+    console.log('Estrategia de GitHub configurada correctamente');
+} else {
+    console.warn('GitHub OAuth no configurado. Faltan variables de entorno:');
+    if (!githubClientId) console.warn('- GITHUB_CLIENT_ID');
+    if (!githubClientSecret) console.warn('- GITHUB_CLIENT_SECRET');
+    if (!githubCallbackUrl) console.warn('- GITHUB_CALLBACK_URL');
+}
+
+// Inicializar Passport
 app.use(passport.initialize());
 app.use(passport.session());
 

@@ -99,21 +99,33 @@ export class ContactsController {
 
   private async verifyRecaptcha(token: string): Promise<boolean> {
     try {
-      console.log('Verificando token reCAPTCHA:', token);
-      const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `secret=6LfzXWArAAAAAMsuzL9Pz0m1y6iGS-6Xu7n53S6n&response=${token}`
-      });
+        console.log('Verificando token reCAPTCHA');
+        const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+        
+        if (!secretKey) {
+            console.error('No se encontró la clave secreta de reCAPTCHA');
+            return false;
+        }
 
-      const data = await response.json();
-      console.log('Respuesta de verificación reCAPTCHA:', data);
-      return data.success;
+        const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `secret=${secretKey}&response=${token}`
+        });
+
+        const data = await response.json();
+        console.log('Respuesta de verificación reCAPTCHA:', data);
+        
+        if (!data.success) {
+            console.error('Error en verificación reCAPTCHA:', data['error-codes']);
+        }
+        
+        return data.success;
     } catch (error) {
-      console.error('Error al verificar reCAPTCHA:', error);
-      return false;
+        console.error('Error al verificar reCAPTCHA:', error);
+        return false;
     }
   }
 
