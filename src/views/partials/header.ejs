@@ -1,0 +1,170 @@
+<nav class="navbar">
+    <div class="navbar-content">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-code"></i>
+            PixelCrafters
+        </a>
+        <div class="navbar-right">
+            <% if (locals.user) { %>
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span><%= locals.user.username %></span>
+                </div>
+                <% if (locals.user.isAdmin) { %>
+                    <div class="admin-links">
+                        <a class="nav-link admin-btn" href="/admin/contacts">
+                            <i class="fas fa-address-book"></i>
+                            Contactos
+                        </a>
+                        <a class="nav-link admin-btn" href="/admin/payments">
+                            <i class="fas fa-credit-card"></i>
+                            Pagos
+                        </a>
+                    </div>
+                <% } %>
+                <a class="nav-link logout-btn" href="/auth/logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Cerrar Sesión
+                </a>
+            <% } %>
+        </div>
+    </div>
+</nav>
+
+<style>
+    .navbar {
+        background: #ffffff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .navbar-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .navbar-brand {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2e7ee6;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .navbar-brand i {
+        font-size: 1.8rem;
+    }
+
+    .navbar-right {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: #f8f9fa;
+        border-radius: 20px;
+        font-weight: 500;
+        color: #495057;
+    }
+
+    .user-info i {
+        color: #2e7ee6;
+        font-size: 1.2rem;
+    }
+
+    .admin-links {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .admin-btn {
+        color: #ffffff !important;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        background: #2e7ee6;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .admin-btn:hover {
+        background: #1a6fd1 !important;
+        transform: translateY(-1px);
+        color: #ffffff !important;
+    }
+
+    .admin-btn i {
+        font-size: 1.1em;
+    }
+
+    .logout-btn {
+        color: #ffffff !important;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1.5rem;
+        border-radius: 4px;
+        background: #dc3545;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .logout-btn:hover {
+        background: #c82333 !important;
+        transform: translateY(-1px);
+        color: #ffffff !important;
+    }
+
+    .logout-btn i {
+        font-size: 1.1em;
+    }
+
+    @media (max-width: 768px) {
+        .navbar-right {
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 1rem;
+        }
+
+        .admin-links {
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.5rem;
+        }
+
+        .user-info {
+            font-size: 0.9rem;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggler = document.querySelector('.navbar-toggler');
+        const collapse = document.querySelector('.navbar-collapse');
+        
+        if (toggler && collapse) {
+            toggler.addEventListener('click', function() {
+                collapse.classList.toggle('show');
+            });
+        }
+    });
+</script> 

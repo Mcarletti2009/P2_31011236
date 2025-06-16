@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto | PixelCrafters</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <%
+    locals.metaDescription = 'Contáctanos para transformar tu visión digital en realidad. Ofrecemos consultas gratuitas y soluciones personalizadas para tu negocio.';
+    locals.metaKeywords = 'contacto, consulta digital, asesoría web, cotización, servicios digitales, PixelCrafters';
+    locals.ogType = 'website';
+    locals.ogUrl = 'https://pixelcrafters.com/contact';
+    locals.ogTitle = 'Contacta con PixelCrafters - Tu Socio Digital';
+    locals.ogDescription = '¿Listo para llevar tu negocio al siguiente nivel? Contáctanos para una consulta gratuita y descubre cómo podemos ayudarte a alcanzar tus objetivos digitales.';
+    locals.ogImage = '/images/og-contact.jpg';
+    locals.title = 'Contacto - PixelCrafters';
+    %>
+</head>
+<body>
+    <header>
+        <h1>PixelCrafters</h1>
+        <p>CREANDO MUNDOS VISUALES, UN PIXEL A LA VEZ</p>
+        <nav class="main-nav">
+            <button onclick="window.location.href='/'" class="nav-btn">Inicio</button>
+            <button onclick="window.location.href='/payment'" class="nav-btn">Pago</button>
+            <button onclick="window.location.href='/admin/contacts'" class="nav-btn">Admin</button>
+            <button onclick="window.location.href='/auth/login'" class="nav-btn">Inicio de Sesión</button>
+        </nav>
+    </header>
+
+    <main class="container mt-4">
+        <div class="contact-section">
+            <h2>Contacto</h2>
+            <p class="section-description">¿Listo para transformar tu visión en realidad?</p>
+
+            <div class="contact-container">
+                <div class="contact-form-container">
+                    <form id="contactForm" class="contact-form" action="/contact/add" method="POST">
+                        <div class="form-group">
+                            <label for="email">
+                                <i class="fas fa-envelope"></i>
+                                Correo Electrónico
+                            </label>
+                            <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="names">
+                                <i class="fas fa-user"></i>
+                                Nombres
+                            </label>
+                            <input type="text" id="names" name="names" placeholder="Tu nombre completo" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">
+                                <i class="fas fa-tag"></i>
+                                Asunto
+                            </label>
+                            <input type="text" id="subject" name="subject" placeholder="¿En qué podemos ayudarte?" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="comment">
+                                <i class="fas fa-comment"></i>
+                                Mensaje
+                            </label>
+                            <textarea id="comment" name="comment" rows="5" placeholder="Cuéntanos más sobre tu proyecto..." required></textarea>
+                        </div>
+
+                        <button type="submit" id="submitButton" class="submit-btn" data-callback="onSubmit">
+                            <i class="fas fa-paper-plane"></i>
+                            Enviar Mensaje
+                        </button>
+                    </form>
+                </div>
+
+                <div class="contact-benefits">
+                    <div class="benefit">
+                        <i class="fas fa-clock"></i>
+                        <h3>Respuesta Rápida</h3>
+                        <p>Te responderemos en menos de 24 horas hábiles.</p>
+                    </div>
+
+                    <div class="benefit">
+                        <i class="fas fa-comments"></i>
+                        <h3>Comunicación Clara</h3>
+                        <p>Mantendremos una comunicación constante durante todo el proceso.</p>
+                    </div>
+
+                    <div class="benefit">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Privacidad Garantizada</h3>
+                        <p>Tus datos están seguros y nunca serán compartidos.</p>
+                    </div>
+
+                    <div class="benefit">
+                        <i class="fas fa-headset"></i>
+                        <h3>Soporte Personalizado</h3>
+                        <p>Atención dedicada para resolver todas tus dudas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de reCAPTCHA -->
+    <div id="recaptchaModal" class="recaptcha-modal">
+        <div class="recaptcha-modal-content">
+            <button onclick="document.getElementById('recaptchaModal').style.display='none'" class="close-modal">
+                <i class="fas fa-times"></i>
+            </button>
+            <h3>Verificación de Seguridad</h3>
+            <p>Para proteger nuestro sitio contra spam, por favor complete la verificación de seguridad antes de enviar su mensaje.</p>
+            <div class="g-recaptcha" 
+                 data-sitekey="6LfzXWArAAAAAGBJhvQK0-tCCQLglrFEVG-a298r"
+                 data-callback="onRecaptchaComplete"
+                 data-size="normal">
+            </div>
+            <button id="continueButton" class="continue-btn" style="display: none;" onclick="submitForm()">
+                <i class="fas fa-check"></i>
+                Continuar
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let recaptchaToken = null;
+
+        function onRecaptchaComplete(token) {
+            console.log('reCAPTCHA completado, token recibido');
+            recaptchaToken = token;
+            document.getElementById('continueButton').style.display = 'inline-block';
+        }
+
+        function submitForm() {
+            if (!recaptchaToken) {
+                alert('Por favor, complete la verificación de seguridad');
+                return;
+            }
+
+            // Añadir el token al formulario
+            const tokenInput = document.createElement('input');
+            tokenInput.type = 'hidden';
+            tokenInput.name = 'g-recaptcha-response';
+            tokenInput.value = recaptchaToken;
+            document.getElementById('contactForm').appendChild(tokenInput);
+            
+            // Enviar el formulario
+            console.log('Enviando formulario con token reCAPTCHA');
+            document.getElementById('contactForm').submit();
+        }
+
+        // Manejar el envío del formulario
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Formulario enviado, mostrando reCAPTCHA');
+            
+            // Resetear el token
+            recaptchaToken = null;
+            document.getElementById('continueButton').style.display = 'none';
+            
+            // Mostrar el modal de reCAPTCHA
+            const modal = document.getElementById('recaptchaModal');
+            modal.style.display = 'flex';
+            
+            // Resetear reCAPTCHA
+            grecaptcha.reset();
+        });
+    </script>
+
+    <style>
+        .recaptcha-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .recaptcha-modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            text-align: center;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+            padding: 5px;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .continue-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .continue-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .g-recaptcha {
+            margin: 20px auto;
+            display: inline-block;
+        }
+    </style>
+</body>
+</html>

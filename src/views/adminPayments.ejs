@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración de Pagos | PixelCrafters</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>PixelCrafters</h1>
+        <p>CREANDO MUNDOS VISUALES, UN PIXEL A LA VEZ</p>
+        <nav class="main-nav">
+            <button onclick="window.location.href='/'" class="nav-btn">Inicio</button>
+            <button onclick="window.location.href='/contact'" class="nav-btn">Contacto</button>
+            <button onclick="window.location.href='/payment'" class="nav-btn">Pago</button>
+            <% if (isAdmin) { %>
+                <button onclick="window.location.href='/admin/contacts'" class="nav-btn admin-btn">
+                    <i class="fas fa-envelope"></i>
+                    Administrar Contactos
+                </button>
+            <% } %>
+        </nav>
+    </header>
+
+    <div class="admin-section">
+        <h2>Administración de Pagos</h2>
+        <p>Gestiona y revisa los pagos realizados</p>
+
+        <% if (locals.error) { %>
+            <div class="admin-error">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p><%= error %></p>
+                <a href="/auth/login" class="admin-login-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Iniciar Sesión como Admin
+                </a>
+            </div>
+        <% } else if (isAdmin) { %>
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar por servicio o estado...">
+                    <button onclick="searchPayments()" class="search-btn">
+                        <i class="fas fa-search"></i>
+                        Buscar
+                    </button>
+                    <button onclick="resetSearch()" class="reset-btn">
+                        <i class="fas fa-undo"></i>
+                        Restablecer
+                    </button>
+                </div>
+                <div class="filter-group">
+                    <select id="serviceFilter" class="filter-select" onchange="filterPayments()">
+                        <option value="">Todos los servicios</option>
+                        <option value="Diseño Web">Diseño Web</option>
+                        <option value="Desarrollo Web">Desarrollo Web</option>
+                        <option value="Mantenimiento">Mantenimiento</option>
+                    </select>
+                    <select id="statusFilter" class="filter-select" onchange="filterPayments()">
+                        <option value="">Todos los estados</option>
+                        <option value="Completado">Completado</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Cancelado">Cancelado</option>
+                    </select>
+                </div>
+                <div class="search-results">
+                    <i class="fas fa-info-circle"></i>
+                    <span id="searchResults"></span>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="payments-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Servicio</th>
+                            <th>Monto</th>
+                            <th>Fecha de Pago</th>
+                            <th>Estado</th>
+                            <th>Fecha de Registro</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentsTableBody">
+                        <% if (payments && payments.length > 0) { %>
+                            <% payments.forEach(payment => { %>
+                                <tr>
+                                    <td><%= payment.id %></td>
+                                    <td><%= payment.service %></td>
+                                    <td class="amount-cell">
+                                        <i class="fas fa-dollar-sign"></i>
+                                        <%= payment.amount.toFixed(2) %>
+                                    </td>
+                                    <td class="date-cell">
+                                        <i class="far fa-calendar-alt"></i>
+                                        <%= new Date(payment.payment_date).toLocaleDateString() %>
+                                    </td>
+                                    <td class="status-cell">
+                                        <span class="status-badge <%= payment.payment_status %>">
+                                            <i class="fas fa-circle"></i>
+                                            <%= payment.payment_status %>
+                                        </span>
+                                    </td>
+                                    <td class="date-cell">
+                                        <i class="far fa-clock"></i>
+                                        <%= new Date(payment.created_at).toLocaleString() %>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="6" class="no-payments">
+                                    <i class="fas fa-info-circle"></i>
+                                    No hay pagos registrados
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+    </div>
+
+    <style>
+        .search-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .search-input:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: #adb5bd;
+        }
+
+        .search-btn {
+            padding: 12px 25px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+
+        .search-btn i {
+            font-size: 1.1em;
+        }
+
+        .reset-btn {
+            padding: 12px 25px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+        }
+
+        .reset-btn i {
+            font-size: 1.1em;
+        }
+
+        .search-results {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .search-results i {
+            color: #28a745;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: white;
+            color: #495057;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-select:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+            outline: none;
+        }
+
+        .payments-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .payments-table th,
+        .payments-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .payments-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .amount-cell {
+            font-weight: 500;
+            color: #28a745;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.875em;
+            font-weight: 500;
+        }
+
+        .status-badge i {
+            font-size: 0.5em;
+            margin-right: 6px;
+        }
+
+        .status-badge.completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-badge.failed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .no-payments {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+        }
+
+        .no-payments i {
+            margin-right: 8px;
+        }
+
+        .admin-error {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .admin-error i {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #856404;
+        }
+
+        .admin-error p {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+
+        .admin-login-btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .admin-login-btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .admin-login-btn i {
+            margin-right: 8px;
+            font-size: 1em;
+            color: white;
+        }
+
+        .admin-btn {
+            background-color: #28a745;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        .admin-btn i {
+            font-size: 1.1em;
+        }
+
+        .payment-section {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section-description {
+            color: #6c757d;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+    </style>
+
+    <script>
+        async function searchPayments() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const serviceFilter = document.getElementById('serviceFilter').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+            const rows = document.querySelectorAll('tbody tr');
+            let matchCount = 0;
+
+            rows.forEach(row => {
+                const service = row.cells[1].textContent.toLowerCase();
+                const status = row.cells[4].textContent.toLowerCase();
+                const matchesSearch = service.includes(searchTerm) || status.includes(searchTerm);
+                const matchesService = !serviceFilter || service === serviceFilter;
+                const matchesStatus = !statusFilter || status === statusFilter;
+                
+                const isVisible = matchesSearch && matchesService && matchesStatus;
+                row.style.display = isVisible ? '' : 'none';
+                if (isVisible) matchCount++;
+            });
+
+            const resultsText = searchTerm || serviceFilter || statusFilter ? 
+                `Se encontraron ${matchCount} ${matchCount === 1 ? 'resultado' : 'resultados'}` : 
+                'Mostrando todos los pagos';
+            document.getElementById('searchResults').textContent = resultsText;
+        }
+
+        function filterPayments() {
+            searchPayments();
+        }
+
+        function resetSearch() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('serviceFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach(row => row.style.display = '');
+            document.getElementById('searchResults').textContent = 'Mostrando todos los pagos';
+        }
+
+        // Agregar búsqueda al presionar Enter
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPayments();
+            }
+        });
+    </script>
+</body>
+</html> 

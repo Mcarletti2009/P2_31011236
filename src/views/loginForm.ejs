@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión | PixelCrafters</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>PixelCrafters</h1>
+        <p>CREANDO MUNDOS VISUALES, UN PIXEL A LA VEZ</p>
+        <nav class="main-nav">
+            <button onclick="window.location.href='/'" class="nav-btn">Inicio</button>
+            <button onclick="window.location.href='/contact'" class="nav-btn">Contacto</button>
+            <button onclick="window.location.href='/payment'" class="nav-btn">Pago</button>
+            <button onclick="window.location.href='/admin/contacts'" class="nav-btn">Admin</button>
+        </nav>
+    </header>
+
+    <div class="contact-section">
+        <h2>Iniciar Sesión</h2>
+        <p class="section-description">Accede a tu cuenta para gestionar tus servicios</p>
+
+        <div class="contact-container">
+            <div class="contact-form-container">
+                <% if (locals.error) { %>
+                    <div class="alert alert-danger" role="alert">
+                        <%= error %>
+                    </div>
+                <% } %>
+
+                <form class="contact-form" action="/auth/login" method="POST">
+                    <div class="form-group">
+                        <label for="username">
+                            <i class="fas fa-user"></i>
+                            Usuario
+                        </label>
+                        <input type="text" id="username" name="username" required 
+                               placeholder="Ingresa tu nombre de usuario">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">
+                            <i class="fas fa-lock"></i>
+                            Contraseña
+                        </label>
+                        <input type="password" id="password" name="password" required
+                               placeholder="Ingresa tu contraseña">
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Iniciar Sesión
+                    </button>
+
+                    <div class="divider">
+                        <span>o continúa con</span>
+                    </div>
+
+                    <a href="/auth/github" class="github-btn">
+                        <svg height="24" width="24" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                        </svg>
+                        Iniciar sesión con GitHub
+                    </a>
+                </form>
+            </div>
+
+            <div class="contact-benefits">
+                <div class="benefit">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Acceso Seguro</h3>
+                    <p>Tu información está protegida con las mejores prácticas de seguridad.</p>
+                </div>
+
+                <div class="benefit">
+                    <i class="fas fa-user-shield"></i>
+                    <h3>Privacidad Garantizada</h3>
+                    <p>Tus datos personales están seguros y nunca serán compartidos.</p>
+                </div>
+
+                <div class="benefit">
+                    <i class="fas fa-sync"></i>
+                    <h3>Acceso Rápido</h3>
+                    <p>Inicia sesión de forma instantánea y accede a todos tus servicios.</p>
+                </div>
+
+                <div class="benefit">
+                    <i class="fas fa-headset"></i>
+                    <h3>Soporte 24/7</h3>
+                    <p>Nuestro equipo está disponible para ayudarte en cualquier momento.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+        .divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e0e0e0;
+        }
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+        .github-btn {
+            background-color: #24292e;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin-top: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .github-btn:hover {
+            background-color: #1b1f23;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .alert {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</body>
+</html> 

@@ -1,0 +1,52 @@
+{
+  "name": "dita-sea",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && npm run copy-views && npm run copy-public",
+    "copy-views": "cp -r src/views dist/",
+    "copy-public": "cp -r src/public dist/",
+    "start": "node dist/app.js",
+    "dev": "nodemon --watch src/**/*.ts --exec ts-node src/app.ts",
+    "init-admin": "ts-node src/scripts/initAdmin.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/express-session": "^1.18.2",
+    "@types/node-fetch": "^2.6.12",
+    "@types/nodemailer": "^6.4.17",
+    "@types/passport": "^1.0.17",
+    "@types/passport-github2": "^1.2.9",
+    "@types/passport-local": "^1.0.38",
+    "axios": "^1.10.0",
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.0",
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.18.1",
+    "node-fetch": "^2.7.0",
+    "nodemailer": "^7.0.3",
+    "passport": "^0.7.0",
+    "passport-github2": "^0.1.12",
+    "passport-local": "^1.0.0",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.5",
+    "@types/express": "^5.0.1",
+    "@types/express-ejs-layouts": "^2.5.4",
+    "@types/node": "^22.15.17",
+    "@types/sqlite3": "^3.1.11",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
