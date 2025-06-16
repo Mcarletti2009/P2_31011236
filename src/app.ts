@@ -10,7 +10,6 @@ import passport from 'passport';
 import { configurePassport } from './config/passport';
 import { UserModel } from './models/User';
 import authRoutes from './routes/auth';
-import expressLayouts from 'express-ejs-layouts';
 
 // Importa tus modelos y controladores (asegúrate de que las rutas sean correctas)
 import { ContactsModel } from './models/contactsModel';
@@ -31,7 +30,10 @@ const viewsPath = process.env.NODE_ENV === 'production'
   ? path.join(__dirname, 'views')
   : path.join(__dirname, '..', 'src', 'views');
 app.set('views', viewsPath);
-app.use(expressLayouts);
+
+// Configuración de express-ejs-layouts
+const layouts = require('express-ejs-layouts');
+app.use(layouts);
 app.set('layout', 'layouts/main');
 app.set("layout extractScripts", true);
 app.set("layout extractStyles", true);
